@@ -64,22 +64,55 @@ namespace GameProgII_StackableItems_Tweedale
                     _inventory.AddItem(new Banana());
                     break;
                 case ConsoleKey.Q:
-                    _inventory.RemoveItem(0);
+                    PromptRemoveItem(0);
                     break;
                 case ConsoleKey.W:
-                    _inventory.RemoveItem(1);
+                    PromptRemoveItem(1);
                     break;
                 case ConsoleKey.E:
-                    _inventory.RemoveItem(2);
+                    PromptRemoveItem(2);
                     break;
                 case ConsoleKey.R:
-                    _inventory.RemoveItem(3);
+                    PromptRemoveItem(3);
                     break;
                 default:
                     break;
             }
 
             return true;
+        }
+
+        static void PromptRemoveItem(int index) 
+        {
+            if (_inventory.Items[index].Item == null) return;
+            if (!_inventory.Items[index].Item.IsStackable)
+            {
+                _inventory.RemoveItem(index);
+                return;
+            }
+
+            string itemDescription = _inventory.Items[index].Item.Description;
+
+            Console.WriteLine();
+            Console.WriteLine($"How many {itemDescription} do you want to remove?");
+
+            ConsoleKeyInfo input;
+
+            while (true)
+            {
+                input = Console.ReadKey(true);
+
+                if (Char.IsDigit(input.KeyChar)) break;
+            }
+
+            int amountToRemove = int.Parse(input.KeyChar.ToString());
+
+            
+            int amountRemoved = _inventory.RemoveItem(index, amountToRemove);
+
+            Console.WriteLine($"Removed {amountRemoved} {itemDescription}.");
+            Console.WriteLine("Press any key to continue:");
+            Console.ReadKey(true);
         }
 
         static void DisplayInventory() 

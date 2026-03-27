@@ -61,5 +61,26 @@ namespace GameProgII_StackableItems_Tweedale
                 Items[index].Amount = 0;
             }
         }
+
+        public int RemoveItem(int index, int amount)
+        {
+            if (Items[index].Item == null) return 0;
+
+            if (Items[index].Amount > 1)
+            {
+                int amountRemoved = Math.Min(amount, Items[index].Amount);
+
+                Items[index].Amount = Math.Max(0, Items[index].Amount - amount);
+                if (Items[index].Amount <= 0) Items[index].Item = null;
+
+                return amountRemoved;
+            }
+            else
+            {
+                Items[index].Item = null;
+                Items[index].Amount = 0;
+                return 1;
+            }
+        }
     }
 }
